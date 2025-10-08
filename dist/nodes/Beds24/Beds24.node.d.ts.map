@@ -1,0 +1,1 @@
+{"version":3,"file":"Beds24.node.d.ts","sourceRoot":"","sources":["../../../nodes/Beds24/Beds24.node.ts"],"names":[],"mappings":"AAaA,OAAO,KAAK,EACX,iBAAiB,EACjB,kBAAkB,EAClB,SAAS,EACT,oBAAoB,EAGpB,MAAM,cAAc,CAAC;AAMtB,qBAAa,MAAO,YAAW,SAAS;IAMvC,WAAW,EAAE,oBAAoB,CAya/B;IASI,OAAO,CAAC,IAAI,EAAE,iBAAiB,GAAG,OAAO,CAAC,kBAAkB,EAAE,EAAE,CAAC;CA+PvE"}

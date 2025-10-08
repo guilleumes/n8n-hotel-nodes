@@ -5,10 +5,9 @@ yarn.lock
 pnpm-lock.yaml
 
 # Build output
-dist/
-*.js
+# dist/ - INCLUIDO en repo para deploy directo
 *.js.map
-*.d.ts
+# *.d.ts - Necesarios para TypeScript
 
 # Keep specific JS files
 !gulpfile.js
