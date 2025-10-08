@@ -1,49 +1,29 @@
-# ⚡ Quick Start - n8n Hotel Nodes
+# 🚀 Quick Start - n8n Hotel Nodes
 
 Comandos más utilizados para desarrollo y despliegue.
 
 ---
 
-## 🚀 Setup Inicial
-
-### Clonar y Setup Local
+## 📦 Comandos Esenciales (pnpm)
 
 ```bash
-# Clonar repositorio
-git clone https://github.com/guilleumes/n8n-hotel-nodes.git
-cd n8n-hotel-nodes
+# Instalar dependencias (primera vez)
+pnpm install
 
-# Instalar dependencias
-npm install
+# Build completo
+pnpm run build
 
-# Compilar nodos
-npm run build
+# Desarrollo con watch mode
+pnpm run dev
 
-# Modo watch (auto-recompila)
-npm run watch
-```
+# Formatear código
+pnpm run format
 
----
+# Verificar código
+pnpm run lint
 
-## 🔧 Desarrollo
-
-### Compilar Nodos
-
-```bash
-# Compilación única
-npm run build
-
-# Watch mode (desarrollo)
-npm run watch
-
-# Limpiar y recompilar
-npm run rebuild
-```
-
-### Limpiar Build
-
-```bash
-npm run clean
+# Limpiar build
+pnpm run clean
 ```
 
 ---
@@ -161,8 +141,8 @@ git clone https://github.com/guilleumes/n8n-hotel-nodes.git
 cd n8n-hotel-nodes
 
 # Compilar
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
 
 ### Actualizar en VPS
@@ -202,8 +182,8 @@ docker-compose restart n8n
 ```bash
 # Limpiar y reinstalar
 rm -rf node_modules package-lock.json dist
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
 
 ### Docker Issues
@@ -243,8 +223,8 @@ docker-compose logs --tail=50
 # Limpiar todo y empezar de nuevo
 npm run clean
 rm -rf node_modules
-npm install
-npm run build
+pnpm install
+pnpm run build
 docker-compose restart n8n
 ```
 
