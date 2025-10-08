@@ -1,20 +1,23 @@
 {
   "compilerOptions": {
-    "lib": ["es2019", "es2020", "es2022"],
+    "lib": ["ES2022"],
     "module": "commonjs",
     "moduleResolution": "node",
     "removeComments": true,
     "strict": true,
     "preserveConstEnums": true,
     "declaration": true,
+    "declarationMap": true,
     "outDir": "./dist/",
-    "target": "es2019",
+    "rootDir": "./",
+    "target": "ES2022",
     "sourceMap": true,
     "esModuleInterop": true,
-    "useUnknownInCatchVariables": false,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./src/@types"]
   },
   "include": ["credentials/**/*.ts", "nodes/**/*.ts", "src/@types/**/*"],
-  "exclude": ["node_modules/**/*", "dist/**/*", "**/*.test.ts", "**/*.spec.ts"]
+  "exclude": ["node_modules/**/*", "dist/**/*", "**/*.test.ts", "**/*.spec.ts", "gulpfile.js"]
 }

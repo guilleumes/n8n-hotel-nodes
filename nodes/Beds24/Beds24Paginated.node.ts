@@ -3,14 +3,16 @@
  * 
  * Copia del nodo original Beds24 para implementar paginación y futuras mejoras.
  */
-import {
+import type {
 	IExecuteFunctions,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	NodeConnectionType,
 	IDataObject,
 	IHttpRequestOptions,
+} from 'n8n-workflow';
+
+import {
 	NodeOperationError,
 } from 'n8n-workflow';
 
@@ -26,8 +28,8 @@ export class Beds24Paginated implements INodeType {
 		defaults: {
 			name: 'Beds24 Paginated',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: ['main'],
+		outputs: ['main'],
 		credentials: [
 			{
 				name: 'beds24Api',
@@ -574,14 +576,15 @@ export class Beds24Paginated implements INodeType {
 					baseURL: 'https://api.beds24.com/v2',
 					url: '/bookings',
 					body: [updateData],
-					json: true,
 				};
+
 				const response = await this.helpers.request!(options);
 				returnData.push(response);
 			}
 		} catch (error) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
 			if (this.continueOnFail()) {
-				returnData.push({ error: error.message });
+				returnData.push({ error: errorMessage });
 				continue;
 			}
 			throw error;

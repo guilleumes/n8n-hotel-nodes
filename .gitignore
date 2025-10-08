@@ -13,6 +13,8 @@ dist/
 # Keep specific JS files
 !gulpfile.js
 !*.config.js
+!scripts/*.js
+!.eslintrc.js
 
 # Keep type definitions in @types if needed
 !src/@types/**/*.d.ts

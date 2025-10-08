@@ -1,10 +1,8 @@
-import {
-	INodeType,
-	INodeTypeDescription,
-	ITriggerResponse,
+import type {
 	IWebhookFunctions,
 	IWebhookResponseData,
-	NodeConnectionType,
+	INodeType,
+	INodeTypeDescription,
 	IDataObject,
 } from 'n8n-workflow';
 
@@ -20,14 +18,11 @@ export class Beds24Trigger implements INodeType {
 			name: 'Beds24 Trigger',
 		},
 		inputs: [],
-		outputs: [{
-			type: NodeConnectionType.Main,
-		}],
+		outputs: ['main'],
 		webhooks: [
 			{
 				name: 'default',
 				httpMethod: 'POST',
-				responseMode: 'onReceived',
 				path: 'webhook',
 			},
 		],
@@ -141,12 +136,13 @@ export class Beds24Trigger implements INodeType {
 			};
 
 		} catch (error) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
 			return {
 				webhookResponse: {
 					statusCode: 400,
 					body: {
 						status: 'error',
-						message: error.message,
+						message: errorMessage,
 					},
 				},
 			};

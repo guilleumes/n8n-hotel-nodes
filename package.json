@@ -27,14 +27,18 @@
   },
   "main": "index.js",
   "scripts": {
-    "build": "tsc && gulp build:icons",
+    "build": "pnpm run clean && tsc && pnpm run copy-assets",
+    "copy-assets": "node scripts/copy-assets.js",
     "watch": "tsc --watch",
-    "rebuild": "npm run clean && npm run build",
+    "dev": "tsc --watch",
+    "rebuild": "pnpm run clean && pnpm run build",
     "clean": "rimraf dist",
-    "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes credentials package.json",
-    "lintfix": "eslint nodes credentials package.json --fix",
-    "prepublishOnly": "npm run build"
+    "format": "prettier --write \"nodes/**/*.ts\" \"credentials/**/*.ts\" \"src/**/*.ts\"",
+    "format:check": "prettier --check \"nodes/**/*.ts\" \"credentials/**/*.ts\" \"src/**/*.ts\"",
+    "lint": "eslint nodes credentials --ext .ts",
+    "lintfix": "eslint nodes credentials --ext .ts --fix",
+    "prepublishOnly": "pnpm run build",
+    "test": "echo \"No tests yet\""
   },
   "files": [
     "dist",
@@ -56,8 +60,9 @@
   },
   "engines": {
     "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "pnpm": ">=8.0.0"
   },
+  "packageManager": "pnpm@8.15.0",
   "peerDependencies": {
     "n8n-workflow": ">=1.0.0"
   },
@@ -65,10 +70,14 @@
     "@types/express": "^4.17.21",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.9.0",
-    "gulp": "^4.0.2",
-    "n8n-workflow": "1.82.0",
+    "@typescript-eslint/eslint-plugin": "^8.8.1",
+    "@typescript-eslint/parser": "^8.8.1",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "n8n-core": "^1.68.0",
+    "n8n-workflow": "^1.68.0",
     "prettier": "^3.2.5",
     "rimraf": "^6.0.1",
-    "typescript": "~4.8.4"
+    "typescript": "^5.6.3"
   }
 }

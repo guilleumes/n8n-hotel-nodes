@@ -348,9 +348,10 @@ export class Cuentica implements INodeType {
 
 				returnData.push(...executionData);
 			} catch (error) {
+				const errorMessage = error instanceof Error ? error.message : String(error);
 				if (this.continueOnFail()) {
 					const executionErrorData = this.helpers.constructExecutionMetaData(
-						this.helpers.returnJsonArray({ error: error.message }),
+						this.helpers.returnJsonArray({ error: errorMessage }),
 						{ itemData: { item: i } },
 					);
 					returnData.push(...executionErrorData);

@@ -11,14 +11,16 @@
  * @property {INodeTypeDescription} description - Node type description and configuration
  * @property {Function} execute - Main execution function for the node
  */
-import {
+import type {
 	IExecuteFunctions,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	NodeConnectionType,
 	IDataObject,
 	IHttpRequestOptions,
+} from 'n8n-workflow';
+
+import {
 	NodeOperationError,
 } from 'n8n-workflow';
 
@@ -39,8 +41,8 @@ export class Beds24 implements INodeType {
 		defaults: {
 			name: 'Beds24',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: ['main'],
+		outputs: ['main'],
 		credentials: [
 			{
 				name: 'beds24Api',
@@ -517,8 +519,9 @@ export class Beds24 implements INodeType {
 						});
 						returnData.push(response);
 					} catch (error) {
+						const errorMessage = error instanceof Error ? error.message : String(error);
 						this.logger.error('Beds24Node: API request failed', { 
-							error: error.message,
+							error: errorMessage,
 							baseURL: options.baseURL,
 							url: options.url,
 							method: options.method
@@ -603,8 +606,9 @@ export class Beds24 implements INodeType {
 						});
 						returnData.push(response);
 					} catch (error) {
+						const errorMessage = error instanceof Error ? error.message : String(error);
 						this.logger.error('Beds24Node: API request failed', { 
-							error: error.message,
+							error: errorMessage,
 							baseURL: options.baseURL,
 							url: options.url,
 							method: options.method
@@ -624,65 +628,41 @@ export class Beds24 implements INodeType {
 							try {
 								updateData = JSON.parse(rawData);
 							} catch (parseError) {
+								const errorMessage = parseError instanceof Error ? parseError.message : String(parseError);
+								if (!this.continueOnFail()) {
+									throw new NodeOperationError(
+										this.getNode(),
+										`Failed to parse JSON for booking ${bookingId}: ${errorMessage}. Please check your JSON syntax.`,
+										{
+											description: 'The provided JSON could not be parsed. Make sure it\'s valid JSON format.',
+											itemIndex: i,
+										},
+									);
+								}
+								const executionErrorData = this.helpers.constructExecutionMetaData(
+									this.helpers.returnJsonArray({ error: errorMessage }),
+									{ itemData: { item: i } },
+								);
+								returnData.push(...executionErrorData);
+								continue;
+							}
+						} catch (error) {
+							if (error instanceof NodeOperationError) {
+								throw error;
+							}
+							const errorMessage = error instanceof Error ? error.message : String(error);
+							if (!this.continueOnFail()) {
 								throw new NodeOperationError(
 									this.getNode(),
-									'Invalid JSON format. Please check your JSON syntax.',
-									{
-										description: 'The provided JSON could not be parsed. Make sure it\'s valid JSON format.',
-										itemIndex: i,
-									},
+									`Failed to ${operation} ${resource}: ${errorMessage}`,
 								);
 							}
-
-							// Validar que el JSON no está vacío
-							if (Object.keys(updateData).length === 0) {
-								throw new NodeOperationError(
-									this.getNode(),
-									'Empty JSON object provided',
-									{
-										description: 'The JSON object must contain at least one field to update.',
-										itemIndex: i,
-									},
-								);
-							}
-
-							// Asegurar que el ID está presente y es un número
-							updateData.id = parseInt(bookingId, 10);
-							
-							// Validar campos críticos
-							if (updateData.arrival && !/^\d{4}-\d{2}-\d{2}$/.test(updateData.arrival as string)) {
-								throw new NodeOperationError(
-									this.getNode(),
-									'Invalid arrival date format',
-									{
-										description: 'Arrival date must be in YYYY-MM-DD format',
-										itemIndex: i,
-									},
-								);
-							}
-							if (updateData.departure && !/^\d{4}-\d{2}-\d{2}$/.test(updateData.departure as string)) {
-								throw new NodeOperationError(
-									this.getNode(),
-									'Invalid departure date format',
-									{
-										description: 'Departure date must be in YYYY-MM-DD format',
-										itemIndex: i,
-									},
-								);
-							}
-
-						} catch (e) {
-							if (e instanceof NodeOperationError) {
-								throw e;
-							}
-							throw new NodeOperationError(
-								this.getNode(),
-								'Error processing update data',
-								{
-									description: e.message,
-									itemIndex: i,
-								},
+							const executionErrorData = this.helpers.constructExecutionMetaData(
+								this.helpers.returnJsonArray({ error: errorMessage }),
+								{ itemData: { item: i } },
 							);
+							returnData.push(...executionErrorData);
+							continue;
 						}
 					} else {
 						// Método simple con campos individuales
@@ -707,67 +687,33 @@ export class Beds24 implements INodeType {
 						if (updateFields.notes) {
 							updateData.notes = updateFields.notes;
 						}
-						if (updateFields.arrival) {
-							updateData.arrival = updateFields.arrival;
-						}
-						if (updateFields.departure) {
-							updateData.departure = updateFields.departure;
-						}
+						// Añadir más campos según sea necesario
 					}
 
-					this.logger.debug('Beds24Node: Update data prepared', { 
-						bookingId,
-						updateData
-					});
-
+					// Ejecutar la actualización
 					const options: IHttpRequestOptions = {
-						headers: {
-							'token': credentials.token as string,
-							'Accept': 'application/json',
-							'Content-Type': 'application/json',
-						},
 						method: 'POST',
-						baseURL: 'https://api.beds24.com/v2',
-						url: '/bookings',
-						body: [updateData], // Envolver en array según el formato requerido
+						url: '/setBooking',
 						json: true,
+						body: updateData,
 					};
 
-					this.logger.debug('Beds24Node: Making update request', { 
-						baseURL: options.baseURL,
-						url: options.url,
-						method: options.method,
-						updateData: [updateData],
-						headers: {
-							...options.headers,
-							token: '***'
-						}
-					});
-
-					try {
-						const response = await this.helpers.request!(options);
-						this.logger.debug('Beds24Node: Update response received', { 
-							status: 'success',
-							responseKeys: Object.keys(response)
-						});
-						returnData.push(response);
-					} catch (error) {
-						this.logger.error('Beds24Node: Update request failed', { 
-							error: error.message,
-							baseURL: options.baseURL,
-							url: options.url,
-							method: options.method,
-							updateData: [updateData]
-						});
-						throw error;
-					}
+					const response = await this.helpers.request!(options);
+					returnData.push(response);
 				}
 			} catch (error) {
-				if (this.continueOnFail()) {
-					returnData.push({ error: error.message });
-					continue;
+				const errorMessage = error instanceof Error ? error.message : String(error);
+				if (!this.continueOnFail()) {
+					throw new NodeOperationError(
+						this.getNode(),
+						`Failed to ${operation} ${resource}: ${errorMessage}`,
+					);
 				}
-				throw error;
+				const executionErrorData = this.helpers.constructExecutionMetaData(
+					this.helpers.returnJsonArray({ error: errorMessage }),
+					{ itemData: { item: i } },
+				);
+				returnData.push(...executionErrorData);
 			}
 		}
 
