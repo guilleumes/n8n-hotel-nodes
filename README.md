@@ -54,11 +54,6 @@ Spanish invoicing and accounting automation.
 
 - **Cuentica** - Invoice creation, client management, accounting reports
 
-### 📋 **Parte Viajeros**
-Automated guest registration for Spanish authorities (Mossos d'Esquadra).
-
-- **ParteViajeros** - Generate official TXT files automatically
-
 ### 🔐 **TtLock** (Planned)
 Smart lock control and access management.
 

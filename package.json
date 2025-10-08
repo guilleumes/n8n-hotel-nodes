@@ -43,8 +43,12 @@
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
-    "credentials": [],
-    "nodes": []
+    "credentials": [
+      "dist/credentials/CuenticaApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Cuentica/Cuentica.node.js"
+    ]
   },
   "engines": {
     "node": ">=18.0.0",
