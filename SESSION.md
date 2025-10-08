@@ -1,44 +1,66 @@
 # 📝 SESSION - Documento de Trabajo
 
-**Última actualización**: 08/10/2025 03:00  
-**Estado**: ✅ Refactorización completada - Listo para integración
+**Última actualización**: 08/10/2025 03:12  
+**Estado**: ✅ Integrado con GUILLEUMES_2026 - Funcionando en n8n local
 
 ---
 
-## 🚀 PRÓXIMA SESIÓN: Integración con n8n en Docker
+## ✅ INTEGRACIÓN COMPLETADA - 08/10/2025 03:12
 
-### Prompt para el siguiente agente:
+### 🎯 Resultado
 
+**Estado**: ✅ Custom nodes integrados exitosamente con GUILLEUMES_2026
+
+**Integración implementada**:
+- **Desarrollo Local**: Volumen montado desde `c:\windsurf\n8n-hotel-nodes\dist`
+- **Producción VPS**: Clonado en `/opt/guilleumes/n8n-hotel-nodes`
+
+### 📦 Cambios en GUILLEUMES_2026
+
+1. **docker-compose.dev.yml**: Volumen actualizado a `n8n-hotel-nodes/dist`
+2. **docker-compose.prod.yml**: Path VPS configurado
+3. **scripts/setup-n8n-custom-nodes.sh**: Script automático para VPS
+4. **QUICKSTART.md**: Comandos de custom nodes agregados
+5. **apps/n8n/README.md**: Workflow de desarrollo documentado
+
+### ✅ Verificado Funcionando
+
+```bash
+# n8n local arrancado
+docker ps | grep guilleumes-n8n-dev
+# Status: Up (healthy)
+
+# Nodos detectados:
+- Beds24.node.js
+- Beds24Paginated.node.js  
+- Beds24Trigger.node.js
+- Cuentica.node.js
+
+# Credenciales:
+- Beds24Api.credentials.js
+- CuenticaApi.credentials.js
 ```
-CONTEXTO:
-- Tengo n8n corriendo en Docker en GUILLEUMES_2026/docker/
-- Los nodos antiguos funcionan desde c:\windsurf\n8nCustomNodes (TypeScript 4.8)
-- He modernizado los nodos en c:\windsurf\n8n-hotel-nodes (pnpm, TypeScript 5.9)
-- GitHub: https://github.com/guilleumes/n8n-hotel-nodes
 
-OBJETIVO:
-Integrar los nodos modernizados de n8n-hotel-nodes en el n8n Docker de GUILLEUMES_2026,
-reemplazando los nodos antiguos de n8nCustomNodes.
+**URL**: http://localhost:5678
 
-ESTADO ACTUAL:
-- n8n versión: 1.115.0 en Docker Desktop Windows
-- Nodos compilados en: n8n-hotel-nodes/dist/
-- docker-compose en: GUILLEUMES_2026/docker/docker-compose.dev.yml
+### 🔄 Workflow de Desarrollo
 
-TAREA:
-Configurar docker-compose para usar los nuevos nodos modernizados.
+```bash
+# 1. Modificar código aquí (n8n-hotel-nodes)
+cd c:\windsurf\n8n-hotel-nodes
+
+# 2. Compilar
+pnpm build
+
+# 3. Reiniciar n8n (auto-detecta cambios)
+cd c:\windsurf\GUILLEUMES_2026\docker
+docker-compose -f docker-compose.dev.yml restart n8n
+
+# 4. Test en http://localhost:5678
+
+# 5. Commit y push cuando funcione
+git add . && git commit -m "..." && git push
 ```
-
-### Opciones de integración:
-
-**A) Montar volumen local** (más rápido para desarrollo)
-```yaml
-volumes:
-  - c:/windsurf/n8n-hotel-nodes/dist:/home/node/.n8n/custom
-```
-
-**B) Clonar desde GitHub** en el Dockerfile
-**C) Publicar en npm** e instalar en contenedor
 
 ---
 
