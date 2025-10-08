@@ -1,6 +1,44 @@
-# 📝 Sesión Actual de Desarrollo
-**Fecha**: 08/10/2025  
-**Objetivo**: Crear repositorio profesional de n8n custom nodes para gestión hotelera
+# 📝 SESSION - Documento de Trabajo
+
+**Última actualización**: 08/10/2025 03:00  
+**Estado**: ✅ Refactorización completada - Listo para integración
+
+---
+
+## 🚀 PRÓXIMA SESIÓN: Integración con n8n en Docker
+
+### Prompt para el siguiente agente:
+
+```
+CONTEXTO:
+- Tengo n8n corriendo en Docker en GUILLEUMES_2026/docker/
+- Los nodos antiguos funcionan desde c:\windsurf\n8nCustomNodes (TypeScript 4.8)
+- He modernizado los nodos en c:\windsurf\n8n-hotel-nodes (pnpm, TypeScript 5.9)
+- GitHub: https://github.com/guilleumes/n8n-hotel-nodes
+
+OBJETIVO:
+Integrar los nodos modernizados de n8n-hotel-nodes en el n8n Docker de GUILLEUMES_2026,
+reemplazando los nodos antiguos de n8nCustomNodes.
+
+ESTADO ACTUAL:
+- n8n versión: 1.115.0 en Docker Desktop Windows
+- Nodos compilados en: n8n-hotel-nodes/dist/
+- docker-compose en: GUILLEUMES_2026/docker/docker-compose.dev.yml
+
+TAREA:
+Configurar docker-compose para usar los nuevos nodos modernizados.
+```
+
+### Opciones de integración:
+
+**A) Montar volumen local** (más rápido para desarrollo)
+```yaml
+volumes:
+  - c:/windsurf/n8n-hotel-nodes/dist:/home/node/.n8n/custom
+```
+
+**B) Clonar desde GitHub** en el Dockerfile
+**C) Publicar en npm** e instalar en contenedor
 
 ---
 
