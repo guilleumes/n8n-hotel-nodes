@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "lib": ["es2019", "es2020", "es2022"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "strict": true,
+    "preserveConstEnums": true,
+    "declaration": true,
+    "outDir": "./dist/",
+    "target": "es2019",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "./src/@types"]
+  },
+  "include": ["credentials/**/*.ts", "nodes/**/*.ts", "src/@types/**/*"],
+  "exclude": ["node_modules/**/*", "dist/**/*", "**/*.test.ts", "**/*.spec.ts"]
+}
